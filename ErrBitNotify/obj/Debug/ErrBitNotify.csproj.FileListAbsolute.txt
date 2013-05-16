@@ -1,0 +1,10 @@
+C:\Users\Christoph\Desktop\ErrBitApp\ErrBitNotify\obj\Debug\ErrBitNotify.csprojResolveAssemblyReference.cache
+C:\Users\Christoph\Desktop\ErrBitApp\ErrBitNotify\Bin\Debug\ErrBitNotify.dll
+C:\Users\Christoph\Desktop\ErrBitApp\ErrBitNotify\Bin\Debug\ErrBitNotify.pdb
+C:\Users\Christoph\Desktop\ErrBitApp\ErrBitNotify\obj\Debug\ErrBitNotify.dll
+C:\Users\Christoph\Desktop\ErrBitApp\ErrBitNotify\obj\Debug\ErrBitNotify.pdb
+C:\Users\Christoph\Desktop\errbit\ErrBitApp\ErrBitNotify\Bin\Debug\ErrBitNotify.dll
+C:\Users\Christoph\Desktop\errbit\ErrBitApp\ErrBitNotify\Bin\Debug\ErrBitNotify.pdb
+C:\Users\Christoph\Desktop\errbit\ErrBitApp\ErrBitNotify\obj\Debug\ErrBitNotify.csprojResolveAssemblyReference.cache
+C:\Users\Christoph\Desktop\errbit\ErrBitApp\ErrBitNotify\obj\Debug\ErrBitNotify.dll
+C:\Users\Christoph\Desktop\errbit\ErrBitApp\ErrBitNotify\obj\Debug\ErrBitNotify.pdb
