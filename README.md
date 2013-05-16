@@ -7,7 +7,7 @@ The Errbit notifier for Windows Phone is designed to give you instant notificati
 put this line to your App.cs
 
  
-
+```
  private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
  {
                ErrBitNotify.ErrBitNotify.Register("API KEY", "URL", e.ExceptionObject);
