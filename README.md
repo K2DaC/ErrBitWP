@@ -1,8 +1,8 @@
-Errbit Notifer for Windows Phone
+Errbit Notifier for Windows Phone
 ========
 
 
-The Errbit notifier for Windows Phone is designed to give you instant notification of any uncaught exceptions thrown from your Windows Phone applications.
+The Errbit Notifier for Windows Phone is designed to give you instant notification of any uncaught exceptions thrown from your Windows Phone applications.
 
 put this line to your App.cs
 
