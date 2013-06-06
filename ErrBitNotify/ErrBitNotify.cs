@@ -1,19 +1,10 @@
 ﻿using Microsoft.Phone.Info;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Net;
-using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.Xml;
 using System.Text;
 
@@ -25,22 +16,29 @@ namespace ErrBitNotify
         private const String NAME = "Windows Phone ErrBit Notifier";
         private const String URL = "http://errzure.azurewebsites.net/";
         private const String DIR = "ErrBitNotify";
-        private static String mApiKey = "";
-        private static String appVersion = "0";
-        private static String apiEndpoint;
-        private static Exception exception;
-        private List<ParsedException> list;
 
-        public static void Register(String apiKey, String endpoint, Exception e)
+        private static String mApiKey = "";
+        private static String mAppVersion = "0";
+        private static String mApiEndpoint;
+        private static Exception mException;
+        private List<ParsedException> mListOfCodeLines;
+
+        public static void Register(String apiKey, String endpoint, Application app)
         {
-            apiEndpoint = "http://" + endpoint + "/notifier_api/v2/notices";
+            mApiEndpoint = "http://" + endpoint + "/notifier_api/v2/notices";
             mApiKey = apiKey;
-            exception = e;
-            appVersion = System.Reflection.Assembly.GetExecutingAssembly().FullName.Split('=')[1].Split(',')[0];
+            mAppVersion = System.Reflection.Assembly.GetExecutingAssembly().FullName.Split('=')[1].Split(',')[0];
+            app.UnhandledException += new EventHandler<ApplicationUnhandledExceptionEventArgs>(app_UnhandledException);
+            SendAllExceptionsToServer();
+        }
+
+        static void app_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
+        {
+            mException = e.ExceptionObject;
             WriteXMLToFile();
             SendAllExceptionsToServer();
         }
-          
+
         private static void SendAllExceptionsToServer()
         {
             try
@@ -53,7 +51,7 @@ namespace ErrBitNotify
                     {
                         try
                         {
-                            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(apiEndpoint);
+                            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(mApiEndpoint);
                             httpWebRequest.Method = "POST";
                             httpWebRequest.ContentType = "application/xml; charset=utf-8";
                             httpWebRequest.BeginGetRequestStream(result =>
@@ -117,7 +115,7 @@ namespace ErrBitNotify
                     myIsolatedStorage.CreateDirectory(DIR);
 
                 String time = "" + DateTime.Now.Ticks;
-                String filename = appVersion + "-" + time + ".xml";
+                String filename = mAppVersion + "-" + time + ".xml";
                 using (IsolatedStorageFileStream isoStream = new IsolatedStorageFileStream(DIR + "\\" + filename, FileMode.Create, myIsolatedStorage))
                 {
                     XmlWriterSettings settings = new XmlWriterSettings();
@@ -143,10 +141,10 @@ namespace ErrBitNotify
                         writer.WriteEndElement();
                         writer.WriteStartElement("error", "");
                         writer.WriteStartElement("class");
-                        writer.WriteString(exception.GetType().FullName);
+                        writer.WriteString(mException.GetType().FullName);
                         writer.WriteEndElement();
                         writer.WriteStartElement("message");
-                        writer.WriteString("[" + appVersion + "] " + exception.Message);
+                        writer.WriteString("[" + mAppVersion + "] " + mException.Message);
                         writer.WriteEndElement();
                         writer.WriteStartElement("backtrace");
                         for (int i = 0; i < list.Count; i++)
@@ -185,7 +183,7 @@ namespace ErrBitNotify
                         writer.WriteEndElement();
                         writer.WriteStartElement("var", "");
                         writer.WriteAttributeString("key", "App Version");
-                        writer.WriteString(appVersion);
+                        writer.WriteString(mAppVersion);
                         writer.WriteEndElement();
                         writer.WriteEndElement();
                         writer.WriteEndElement();
@@ -194,7 +192,7 @@ namespace ErrBitNotify
                         writer.WriteString("production");
                         writer.WriteEndElement();
                         writer.WriteStartElement("app-version", "");
-                        writer.WriteString(appVersion);
+                        writer.WriteString(mAppVersion);
                         writer.WriteEndElement();
                         writer.WriteEndElement();
                         writer.WriteEndElement();
@@ -205,14 +203,14 @@ namespace ErrBitNotify
             }
         }
 
-        
+
         private static List<ParsedException> SplitException()
         {
             List<ParsedException> list = new List<ParsedException>();
-            string[] words = exception.StackTrace.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
-            for (int i = 0; i < words.Length; i++)
+            string[] lines = mException.StackTrace.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+            for (int i = 0; i < lines.Length; i++)
             {
-                list.Add(new ParsedException(words[i]));
+                list.Add(new ParsedException(lines[i]));
             }
             return list;
         }

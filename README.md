@@ -2,14 +2,10 @@ Errbit Notifier for Windows Phone
 ========
 
 
-The Errbit Notifier for Windows Phone is designed to give you instant notification of any uncaught exceptions thrown from your Windows Phone applications.
+The Errbit Notifier for Windows Phone is designed to send a report of any uncaught exception thrown from your Windows Phone application.
 
-put this line to your App.cs
+put this line to the constructor of your App.cs. Make sure it's the last line there!
 
  
 ```
- private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
- {
-               ErrBitNotify.ErrBitNotify.Register("API KEY", "URL", e.ExceptionObject);
-            
- }
+ ErrBitNotify.ErrBitNotify.Register("API-KEY", "ENDPOINT", this);
